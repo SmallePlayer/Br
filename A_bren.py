@@ -5,7 +5,7 @@ from algorithms import evklid
 from algorithms import manhed
 
 
-def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target):
+def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target, step):
     #infinity matrices for G and F costs
     g_matrix = np.full((rows, cols), np.inf)
     f_matrix = np.full((rows, cols), np.inf)
@@ -19,11 +19,12 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target):
     h_start = manhed.manhed_distance((x_self, y_self), (x_target, y_target))
     f_matrix[x_self][y_self] = h_start
     open_list.append((h_start, x_self, y_self))
-    #print(open_list)
 
+    steps = 0
+    best_nx, best_ny = x_self, y_self
 
-
-    while open_list:
+    while steps < 1:
+        steps += step
         current = min(open_list, key=lambda x: x[0])
         open_list.remove(current)
         current_f, current_x, current_y = current
@@ -34,11 +35,9 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target):
         if current_pos != (x_self, y_self) and current_pos != (x_target, y_target):
             map_matrix[current_x][current_y] = 2
         
-        #print("Current position:", current_pos)
         if current_pos == (x_target, y_target):
-            #print("🎯 Достигли цели!")
+            #print("🎯  цели!")
             
-            # Восстанавливаем путь
             path = []
             r, c = current_x, current_y
             while (r, c) != (x_self, y_self):
@@ -47,9 +46,7 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target):
             path.append((x_self, y_self))
             path.reverse()
             
-            #print(f"Путь ({len(path)} шагов): {path}")
-            #print("Время выполнения: %s секунд" % (time.time() - start_time))
-            return True, path
+            return True, path, nx, ny
             
             
         neighbors = []
@@ -65,14 +62,13 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target):
                 continue
 
             if map_matrix[nx][ny] == 1:
-                continue 
-            
+                continue
             new_g = g_matrix[current_x][current_y] + 1
             
             if new_g < g_matrix[nx][ny]:
                 g_matrix[nx][ny] = new_g
                 h_heigbors = manhed.manhed_distance((nx, ny), (x_target, y_target))
-                # print("Heigbors h:", h_heigbors)
+    
                 new_f = new_g + h_heigbors
                 f_matrix[nx][ny] = new_f
                 
@@ -81,15 +77,15 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target):
                 found = False
                 for i, (f_val, row, col) in enumerate(open_list):
                     if row == nx and col == ny:
-                        # Обновляем запись в open_list
                         open_list[i] = (new_f, nx, ny)
+                        best_nx = nx
+                        best_ny = ny
                         found = True
                         break
                 
-                # Если не нашли - добавляем
                 if not found:
                     open_list.append((new_f, nx, ny))
+                    best_nx = nx
+                    best_ny = ny
                     
-    print("Final map:")
-    print(map_matrix)
-    return False, None
+    return False, None, best_nx, best_ny

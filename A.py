@@ -1,26 +1,29 @@
 import math
+import time 
 import numpy as np
 from algorithms import evklid
 from algorithms import manhed
+
+start_time = time.time()
 
 # start position
 x_self = 0
 y_self = 0
 
 # target position
-x_target = 7
-y_target = 9
+x_target = 474
+y_target = 458
 
 #obstacle position | позиция препятствия
 obstacle = (7,3)
 
 # create map matrix
-map_matrix = np.zeros((10, 10))
+map_matrix = np.zeros((500, 500))
 
 # mark obstacle on map
 map_matrix[obstacle[0]][obstacle[1]] = 1
 
-print(map_matrix)
+#print(map_matrix)
 
 #size of the map
 rows, cols = map_matrix.shape
@@ -38,7 +41,7 @@ g_matrix[x_self][y_self] = 0
 h_start = manhed.manhed_distance((x_self, y_self), (x_target, y_target))
 f_matrix[x_self][y_self] = h_start
 open_list.append((h_start, x_self, y_self))
-print(open_list)
+#print(open_list)
 
 while open_list:
     current = min(open_list, key=lambda x: x[0])
@@ -51,7 +54,7 @@ while open_list:
     if current_pos != (x_self, y_self) and current_pos != (x_target, y_target):
         map_matrix[current_x][current_y] = 2
     
-    print("Current position:", current_pos)
+    #print("Current position:", current_pos)
     if current_pos == (x_target, y_target):
         print("🎯 Достигли цели!")
         
@@ -64,17 +67,18 @@ while open_list:
         path.append((x_self, y_self))
         path.reverse()
         
-        print(f"Путь ({len(path)} шагов): {path}")
+        #print(f"Путь ({len(path)} шагов): {path}")
+        print("Время выполнения: %s секунд" % (time.time() - start_time))
         
         # Отмечаем путь на карте
-        for r, c in path:
-            if (r, c) != (x_self, y_self) and (r, c) != (x_target, y_target):
-                map_matrix[r][c] = 8  # путь
-                print("Marking path on map at:", (r, c))
+        # for r, c in path:
+        #     if (r, c) != (x_self, y_self) and (r, c) != (x_target, y_target):
+        #         map_matrix[r][c] = 8  # путь
+        #         #print("Marking path on map at:", (r, c))
         
         break
-    else:
-        print("Еще не цель, продолжаем...")
+    # else:
+    #     print(f"Еще не цель, продолжаем...") #current: {current_pos}")
         
     neighbors = []
     for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
@@ -96,7 +100,7 @@ while open_list:
         if new_g < g_matrix[nx][ny]:
             g_matrix[nx][ny] = new_g
             h_heigbors = manhed.manhed_distance((nx, ny), (x_target, y_target))
-            print("Heigbors h:", h_heigbors)
+            # print("Heigbors h:", h_heigbors)
             new_f = new_g + h_heigbors
             f_matrix[nx][ny] = new_f
             
@@ -116,4 +120,3 @@ while open_list:
                 
 print("Final map:")
 print(map_matrix)   
-print(open_list)
