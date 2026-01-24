@@ -6,26 +6,49 @@
 
 Проект реализует алгоритм A* для поиска оптимального пути на сетке с препятствиями. Алгоритм использует эвристику расстояния Манхэттена для эффективного поиска.
 
-## Файлы проекта
+## Структура проекта
 
-- **A.py** - основной скрипт с реализацией алгоритма A*
-- **evklid.py** - модуль для расчета евклидова расстояния
-- **manhed.py** - модуль для расчета расстояния Манхэттена
-- **test_line.py** - тесты для проверки функциональности
-- **test_matrix.py** - тесты матрицы
-- **Dockerfile** - конфигурация для развертывания в Docker
+```
+br/
+├── algorithms/              # Модуль с алгоритмами
+│   ├── evklid.py           # Евклидово расстояние
+│   └── manhed.py           # Расстояние Манхэттена
+├── tests/                   # Модуль с тестами
+│   ├── test_line.py        # Тест обработки видео
+│   └── test_matrix.py      # Тест матриц
+├── A.py                     # Главный скрипт (A* алгоритм)
+├── Dockerfile              # Docker конфигурация
+└── README.md               # Этот файл
+```
+
+Подробнее см. [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
+
+## Зависимости между файлами
+
+| Файл | Зависит от |
+|------|-----------|
+| A.py | algorithms.evklid, algorithms.manhed, numpy |
+| tests/test_matrix.py | algorithms.evklid, numpy |
+| tests/test_line.py | cv2, numpy |
+| algorithms/evklid.py | math |
+| algorithms/manhed.py | math |
 
 ## Использование
 
+### Запустить A* алгоритм
 ```bash
 python A.py
 ```
 
 Скрипт создает сетку 10x10, отмечает препятствие и находит путь от начальной позиции (0,0) к целевой позиции (7,9).
 
-### Параметры
+### Запустить тесты
+```bash
+python tests/test_matrix.py    # Тест работы с матрицами
+python tests/test_line.py      # Тест обработки видео
+```
 
-В файле `A.py` можно изменить:
+### Параметры (в файле A.py)
 - `x_self, y_self` - начальная позиция
 - `x_target, y_target` - целевая позиция
 - `obstacle` - позиция препятствия
@@ -41,12 +64,13 @@ python A.py
 
 ```
 numpy
+opencv-python (для test_line.py)
 ```
 
 ## Установка
 
 ```bash
-pip install numpy
+pip install numpy opencv-python
 ```
 
 ## Docker

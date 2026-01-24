@@ -1,7 +1,7 @@
 import math
 import numpy as np
-import evklid
-import manhed
+from algorithms import evklid
+from algorithms import manhed
 
 # start position
 x_self = 0
