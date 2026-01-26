@@ -1,8 +1,8 @@
 import math
 import time
 import numpy as np
-from algorithms import evklid
-from algorithms import manhed
+from br.pathfinding import heuristics
+from br.utils import euclid
 
 
 def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target, step):

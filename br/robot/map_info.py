@@ -6,17 +6,17 @@ from bren import algoritm_bren
 start_time = time.time()
 
 reach = False
-map_matrix = np.zeros((100, 100))
+map_matrix = np.zeros((50, 50))
 
 x_self = 0
 y_self = 0
 
-x_target = 88
-y_target = 77
+x_target = 47
+y_target = 49
 
-obstacle = np.ones((10,10))
+obstacle = np.ones((5,5))
 
-map_matrix[70:80, 70:80] = obstacle
+map_matrix[30:35, 35:40] = obstacle
 
 rows, cols = map_matrix.shape
 
