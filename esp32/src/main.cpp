@@ -90,22 +90,22 @@ void loop() {
     unsigned long now = millis();
     
     // Проверяем, прошло ли 3 секунды с момента последней отправки сообщения
-    if (now - lastSendTime >= 3000) {
-      // Сохраняем текущее время как время последней отправки
-      lastSendTime = now;
+    // if (now - lastSendTime >= 3000) {
+    //   // Сохраняем текущее время как время последней отправки
+    //   lastSendTime = now;
       
-      String message = "Hello from ESP32 - ";
-      message += now / 1000;
-      message += " seconds";
+    //   String message = "Hello from ESP32 - ";
+    //   message += now / 1000;
+    //   message += " seconds";
       
-      Serial.print("Sending: ");
-      Serial.println(message);
+    //   Serial.print("Sending: ");
+  //   Serial.println(message);
       
-      // Отправляем сообщение на подключенный сервер
-      client.print(message);
-      // Отправляем символ новой строки (конец сообщения)
-      client.print("\n");
-    }
+    //   // Отправляем сообщение на подключенный сервер
+    //   client.print(message);
+    //   // Отправляем символ новой строки (конец сообщения)
+    //   client.print("\n");
+    // }
 
     // Проверяем, есть ли данные для чтения с сервера
     if (client.available()) {

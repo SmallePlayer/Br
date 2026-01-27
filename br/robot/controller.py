@@ -16,7 +16,7 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target, step):
 
 
     g_matrix[x_self][y_self] = 0
-    h_start = manhed.manhed_distance((x_self, y_self), (x_target, y_target))
+    h_start = heuristics.manhed_distance((x_self, y_self), (x_target, y_target))
     f_matrix[x_self][y_self] = h_start
     open_list.append((h_start, x_self, y_self))
 
@@ -67,7 +67,7 @@ def algoritm_A(map_matrix,rows, cols, x_self, y_self, x_target, y_target, step):
             
             if new_g < g_matrix[nx][ny]:
                 g_matrix[nx][ny] = new_g
-                h_heigbors = manhed.manhed_distance((nx, ny), (x_target, y_target))
+                h_heigbors = heuristics.manhed_distance((nx, ny), (x_target, y_target))
     
                 new_f = new_g + h_heigbors
                 f_matrix[nx][ny] = new_f

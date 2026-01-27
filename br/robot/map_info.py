@@ -1,7 +1,12 @@
+import sys
+import os
+# Добавляем корневую директорию проекта в sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 import time 
 import numpy as np  
-from A_bren import algoritm_A
-from bren import algoritm_bren
+from br.robot.controller import algoritm_A
+from br.robot.bren import algoritm_bren
 
 start_time = time.time()
 
