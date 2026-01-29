@@ -107,18 +107,23 @@ void loop() {
     //   client.print("\n");
     // }
 
-    // Проверяем, есть ли данные для чтения с сервера
-    if (client.available()) {
-      // Читаем строку данных с сервера до символа новой строки
-      String response = client.readStringUntil('\n');
-      // Удаляем пробелы и символы новой строки с начала и конца строки
-      response.trim();
-      
-      // Проверяем, что строка не пуста (длина больше 0)
-      if (response.length() > 0) {
-        Serial.print("Echo response: ");
-        Serial.println(response);
-      }
+    // Проверяем, достаточно ли данных для чтения (2 float = 8 байт)
+    if (client.available() >= 8) {
+      uint8_t buffer[8];
+
+      client.read(buffer, 8);
+      float path, angle;
+
+      // Копируем байты в переменную path (первые 4 байта)
+      memcpy(&path, &buffer[0], 4);
+      // Копируем байты в переменную angle (следующие 4 байта)
+      memcpy(&angle, &buffer[4], 4);
+
+      // Выводим полученные значения
+      Serial.print("Path: ");
+      Serial.print(path);
+      Serial.print(" | Angle: ");
+      Serial.println(angle);
     }
   }
 
