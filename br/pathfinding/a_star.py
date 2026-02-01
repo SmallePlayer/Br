@@ -2,7 +2,6 @@ import math
 import time 
 import numpy as np
 from br.pathfinding import heuristics
-from br.utils import euclid
 
 start_time = time.time()
 
