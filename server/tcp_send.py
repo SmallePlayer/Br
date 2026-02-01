@@ -18,10 +18,9 @@ def send_data(HOST, PORT, x_self, y_self, angle_self, x_target, y_target, delay=
         s.listen() #прослушивание входящих подключений
         print("Socket is listening")
         conn, addr = s.accept() #принятие входящего подключения
-        while True:
-            print('Connected by', addr) 
-            x_self, y_self, angle_self, x_target, y_target  #данные для отправки
-            data = struct.pack('5f', x_self, y_self, angle_self, x_target, y_target)  #упаковка данных в байты
-            conn.send(data) #отправка данных клиенту
-            time.sleep(delay)
+        print('Connected by', addr) 
+        x_self, y_self, angle_self, x_target, y_target  #данные для отправки
+        data = struct.pack('5f', x_self, y_self, angle_self, x_target, y_target)  #упаковка данных в байты
+        conn.send(data) #отправка данных клиенту
+        time.sleep(delay)
             
