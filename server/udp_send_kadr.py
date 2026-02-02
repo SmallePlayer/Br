@@ -14,16 +14,18 @@ def send__small_video(data, frame_id):
     header = struct.pack('!I',  frame_id)
     packet = header + data
     s.sendto(packet, (HOST, PORT))
+    
 
-cap = config.open_camera(0)
-config.configure_camera(cap, '720')
-config.start_camera_threaded(cap)
+cap1 = config.CameraThread(index=0) # Инициализация многопоточного захвата с камеры
+cap1.start() # Запуск захвата с камеры
+
+
 frame_id = 0
 all_time = 0
 while True:
     start_time = time.time()
 
-    frame = config.get_frame_threaded()
+    frame = cap1.get_frame() # Получение кадра с камеры
     if frame is None:
         continue
     data = config.compress_jpeg(frame)
@@ -36,12 +38,10 @@ while True:
     frame_id += 1
     end_time = time.time()
     all_time += end_time - start_time
-    if frame_id >= 30:
+    if frame_id >= 100:
         print(f"all_time: {all_time}")
-        config.stop_camera_thread()
+        cap1.stop()
         break
     else:
         print(f"Кадр:{frame_id} | time:{end_time - start_time} sec")
     
-cap.release()
-s.close()
