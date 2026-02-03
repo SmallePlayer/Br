@@ -508,6 +508,77 @@ if ret:
     send_video(s, 'localhost', 3333, frame)
 ```
 
+#### `server.udp_send_kadr` и `server.udp_reciv_kadr`
+
+**Отправка и прием больших видеокадров по UDP с разбиением на куски.**
+
+##### `send_big_video(sock, data, frame_id)`
+
+Отправляет большие кадры видео, разбивая их на куски по 60KB.
+
+**Параметры:**
+- `sock`: UDP сокет для отправки
+- `data` (bytes): Сжатые данные кадра (JPEG)
+- `frame_id` (int): Уникальный ID кадра
+
+**Особенности:**
+- Размер куска: 60KB
+- Заголовок включает: frame_id, chunk_idx, num_chunks, data_size
+- Автоматическая обработка ошибок отправки
+- Задержка 1мс между пакетами для надежности
+
+##### `reciv_big_video(sock, data)`
+
+Принимает и собирает куски больших видеокадров.
+
+**Параметры:**
+- `sock`: UDP сокет (не используется в текущей версии)
+- `data` (bytes): Полученные данные пакета
+
+**Возвращает:** 
+- `numpy.ndarray`: Декомпрессированный кадр или `None`
+
+**Особенности:**
+- Статическое сохранение состояния между вызовами
+- Автоматическая сборка кусков в правильном порядке
+- Фильтрация старых/дублированных кадров
+- Отображение собранного кадра через OpenCV
+
+```python
+# Пример использования отправки
+from server.udp_send_kadr import send_big_video
+from sockets import create_udp_socket
+import config
+
+s = create_udp_socket()
+cap = config.CameraThread(index=0)
+cap.start()
+
+frame_id = 0
+while True:
+    frame = cap.get_frame()
+    if frame is not None:
+        data = config.compress_jpeg(frame)
+        send_big_video(s, data, frame_id)
+        frame_id += 1
+```
+
+```python
+# Пример использования приема
+from server.udp_reciv_kadr import reciv_big_video
+from sockets import create_udp_socket, bind_socket
+
+s = create_udp_socket()
+bind_socket(s, 'localhost', 3333)
+
+while True:
+    data, addr = s.recvfrom(65535)
+    frame = reciv_big_video(s, data)
+    if frame is not None:
+        # Кадр автоматически отображается через cv2.imshow
+        pass
+```
+
 #### `server.config`
 
 **Конфигурация для работы с камерой и видео.**
