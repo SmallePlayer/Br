@@ -7,27 +7,21 @@ import time
 
 import sockets
 
-HOST = 'localhost'
-PORT = 3333
-
-s = sockets.create_udp_socket()
-sockets.bind_socket(s, HOST, PORT)
-s.settimeout(5.0)
-
+#функция для получения видео по udp с максимальным размером в 60000 байт.
 def recv_small_video(sock, data):
-    
     frame_id = struct.unpack('!I', data[:4])[0]
     jpeg_data = data[4:]
     return config.decompress_frame(jpeg_data), frame_id
 
+
+# функция для получения видео по udp с поддержкой разбиения на куски при размере кадра более 60000 байт.
 def reciv_big_video(sock, data):
-    # Статические переменные для сохранения состояния между вызовами
-    if not hasattr(reciv_big_video, 'current_frame_id'):
+    if not hasattr(reciv_big_video, 'current_frame_id'): # Инициализация статических переменных для отслеживания текущего кадра и его кусков
         reciv_big_video.current_frame_id = -1
         reciv_big_video.chunks = {}
         reciv_big_video.expected_chunks = 0
     
-    if len(data) < 12:
+    if len(data) < 12: 
         return None
         
     # Распаковываем заголовок
@@ -62,22 +56,4 @@ def reciv_big_video(sock, data):
             return frame
     
     return None
-    
-    
-
-while True:
-    data, addr = s.recvfrom(65535)
-    
-    frame = reciv_big_video(s, data)
-    
-    #frame, frame_id = recv_small_video(s, data)
-    
-    #cv2.imshow('UDP Simple', frame)
-    # print(f"Кадр {frame_id} получен")
-            
-    if cv2.waitKey(1) == ord('q'):
-        cv2.destroyAllWindows()
-        break
-    
-    
 

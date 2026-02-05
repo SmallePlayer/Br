@@ -1,0 +1,60 @@
+{
+    // Исключить папки из поиска и индексации
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/*.pyo": true,
+        "**/.git": true,
+        "**/.pio": true,
+        "**/.venv": true,
+        "**/node_modules": true,
+        "**/*.egg-info": true
+    },
+    
+    // Исключить папки из поиска файлов
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.git": true,
+        "**/.pio": true,
+        "**/.venv": true,
+        "**/node_modules": true
+    },
+    
+    // Исключить папки из мониторинга файлов (экономит память)
+    "files.watcherExclude": {
+        "**/__pycache__/**": true,
+        "**/.git/**": true,
+        "**/.pio/**": true,
+        "**/.venv/**": true,
+        "**/node_modules/**": true
+    },
+    
+    // Python настройки для производительности
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.indexing": false,
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "",
+            "depth": 1,
+            "includeAllSymbols": false
+        }
+    ],
+    
+    
+    
+    // Ограничить количество одновременных задач
+    "typescript.preferences.maxConcurrentProjects": 1,
+    
+    // Отключить предварительную загрузку расширений
+    "extensions.autoCheckUpdates": false,
+    
+    // Оптимизация Git
+    "git.enabled": true,
+    "git.autorefresh": false,
+    "git.detectSubmodules": false,
+    
+    // Отключить телеметрию
+    "telemetry.telemetryLevel": "off",
+    "files.autoSave": "afterDelay"
+}

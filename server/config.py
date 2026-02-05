@@ -3,6 +3,7 @@ import numpy as np
 import struct
 import threading
 
+# Функция для сжатия кадра в JPEG формат
 def compress_jpeg(frame, quality=60):
     encode_params = [cv2.IMWRITE_JPEG_QUALITY, quality]
     success, compressed = cv2.imencode('.jpg', frame, encode_params)
@@ -10,20 +11,12 @@ def compress_jpeg(frame, quality=60):
         raise ValueError("Ошибка сжатия JPEG")
     return compressed.tobytes()
 
-def compress_web(frame, quality=70):
-    encode_params = [cv2.IMWRITE_WEBP_QUALITY, quality]
-    success, compressed = cv2.imencode('.webp', frame, encode_params)
-    if not success:
-        raise ValueError("Ошибка сжатия JPEG")
-    return compressed.tobytes()
-
+#функция для декодирования кадра из JPEG формата
 def decompress_frame(data):
     nparr = np.frombuffer(data, np.uint8)
     frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     return frame
 
-
-# Threaded camera capture
         
 # Класс многопоточного захвата с камеры
 class CameraThread:

@@ -5,18 +5,14 @@ import time
 
 from sockets import create_udp_socket
 
-HOST = 'localhost'
-PORT = 3333
-
-s = create_udp_socket()
-
-def send__small_video(sock, data, frame_id):
+#функция для отправки видео по udp с максимальным размером в 60000 байт.
+def send__small_video(sock, HOST, PORT, data, frame_id):
     header = struct.pack('!I',  frame_id)
     packet = header + data
     sock.sendto(packet, (HOST, PORT))
     
-    
-def send_big_video(sock, data, frame_id):
+# функция для отправки видео по udp с поддержкой разбиения на куски при размере кадра более 60000 байт.  
+def send_big_video(sock, HOST, PORT, data, frame_id):
     CHUNK_SIZE = 60000
     
     data_size = len(data)
@@ -42,30 +38,3 @@ def send_big_video(sock, data, frame_id):
             print(f"Ошибка отправки chunk {chunk_idx} для frame {frame_id}: {e}")
             break
         
-
-cap1 = config.CameraThread(index=0) # Инициализация многопоточного захвата с камеры
-cap1.start() # Запуск захвата с камеры
-
-
-frame_id = 0
-all_time = 0
-while True:
-    start_time = time.time()
-
-    frame = cap1.get_frame() # Получение кадра с камеры
-    if frame is None:
-        continue
-    data = config.compress_jpeg(frame, 50)
-    
-    send_big_video(s, data, frame_id)
-    
-    frame_id += 1
-    end_time = time.time()
-    all_time += end_time - start_time
-    # if frame_id >= 100:
-    #     print(f"all_time: {all_time}")
-    #     cap1.stop()
-    #     break
-    # else:
-    #     print(f"Кадр:{frame_id} | time:{end_time - start_time} sec")
-    
